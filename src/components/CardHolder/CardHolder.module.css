@@ -1,0 +1,11 @@
+
+    .CardHolder {
+        font-size     : 68px;
+        color         : white;
+        padding       : 24px 0;
+        letter-spacing: 1px;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+

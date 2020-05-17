@@ -1,0 +1,11 @@
+
+    .PrimeCardHolder {
+        font-size     : 68px;
+        color         : white;
+
+padding-bottom: 300px;
+        letter-spacing: 1px;
+        height: 200px;
+        display: flex;
+    }
+
