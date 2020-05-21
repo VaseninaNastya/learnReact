@@ -4,13 +4,13 @@
     width          : 100%;
     height         : 100vh;
     display        : flex;
-    flex-wrap: nowrap;
+
     justify-content: center;
     align-items    : center;
     overflow       : hidden;
     position       : relative;
     text-align     : center;
-
+    flex-wrap: wrap;
     background-size      : cover;
     background-repeat    : no-repeat;
     background-position  : center center;
@@ -31,10 +31,15 @@
         background-image: linear-gradient(to top, rgba(26, 40, 120, 0.70), rgba(10, 143, 196, 0.70));
     }
     .wrap {
+        padding: 10px;
         display: flex;
         flex-direction: column;
         position: relative;
         z-index : 1;
+        margin-left: auto;
+        margin-right: auto;
+        flex-wrap: nowrap;
+
     }
 
     .header {
@@ -52,10 +57,10 @@
     }
 
     img {
-        width: 100px;
+        width: 50px;
     }
 
-    svg{        width:100px; }
+    svg{        width:50px; }
     svg g {
         fill:red;
 

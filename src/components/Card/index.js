@@ -1,67 +1,66 @@
-/*
 
-class Card extends React.Component{
-    state = {done:true}
-    handlerCardClick=()=>{
-        console.log("###:it`s mean", this.props.rus)
-    }
-    render(){
-        const{ eng, rus} = this.props;
-        const{done}=this.state;
-        const cardClass =[s.card];
-        if(done){
-            cardClass.push(s.done);
-        }
-        return (
-            <div className={cardClass.join(" ")}
-            onClick={this.handlerCardClick}>
-                <div className={s.cardInner}>
-                    <div className={s.cardFront}>
-                        {eng}
-                    </div>
-                    <div className={s.cardBack}>
-                        {eng}
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-export default Card;
-*/
 import React from 'react';
 import s from './Card.module.css'
+import cl from "classnames";
+import { CheckSquareOutlined, DeleteOutlined  } from "@ant-design/icons";
 
 class Card extends React.Component {
     state = {
-        done: false
+        done: false,
+        isRemembered: false,
     }
+    
     handleCardClick = () => {
-        this.setState({done: !this.state.done})
+        this.setState(({done, isRemembered}) => {
+            if (!isRemembered) {
+                return {
+                    done: !done
+                }
+            }
+        })
     }
+    handleIsRememberClick = () => {
+        this.setState(({isRemembered}) => {
+            return {
+                isRemembered: !isRemembered
+            }
+        }
+        )
+    }
+
     render() {
-        const {eng, rus, allCardWhite} = this.props;
-        console.log ("####", allCardWhite);
-        const { done } = this.state;
-        const cardClass = [s.card];
-        if (done ) {
-            cardClass.push(s.done);
-        } else if (allCardWhite){
-            cardClass.push(s.done);
-        } 
+        const { eng, rus, allCardWhite, onDelitedItem } = this.props;
+        const { done, isRemembered } = this.state;
+        const cardClass = cl(s.card, { [s.done]: done }, { [s.done]: allCardWhite }, { [s.isRemembered]: isRemembered });
+
         return (
-        <div className={cardClass.join(' ')} onClick={this.handleCardClick}>
-            <div className={s.cardInner}>
-                <div className={s.cardFront}>
-                    { eng }
+            <div className={s.root}>
+                <div className={cardClass}>
+                    <div 
+                    className={s.cardInner}
+                    onClick={this.handleCardClick}
+                    >
+                        <div className={s.cardFront}>
+                            {eng}
+                        </div>
+                        <div className={s.cardBack}>
+                            {rus}
+                        </div>
+                    </div>
                 </div>
-                <div className={s.cardBack}>
-                    { rus }
+
+                <div className={s.icons}>
+                    <CheckSquareOutlined onClick={this.handleIsRememberClick} />
+
+                </div>
+                <div className={s.icons}>
+
+                    
+                    <DeleteOutlined onClick={onDelitedItem}/>
                 </div>
             </div>
-        </div>
-    )
+
+        )
     };
 }
 

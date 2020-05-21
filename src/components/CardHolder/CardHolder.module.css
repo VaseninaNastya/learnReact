@@ -2,10 +2,23 @@
     .CardHolder {
         font-size     : 68px;
         color         : white;
-        padding       : 24px 0;
+        padding       : 24px;
         letter-spacing: 1px;
-        height: 200px;
         display: flex;
+        flex-wrap: wrap;
         flex-direction: column;
+        height: 400px;
+margin-left: auto;
+margin-right: auto;
+width: 600px;
+align-items: center;
+
     }
 
+.root{
+    display: flex;
+    flex-wrap: wrap;
+}
+.form{
+    margin-bottom: 24px;
+}

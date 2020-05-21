@@ -1,3 +1,12 @@
+.root{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+
+
+}
+
 .card {
     font-size: 18px;
     text-align: center;
@@ -6,6 +15,7 @@
     perspective: 1000px;
     height: 33px;
     width: 170px;
+    margin-right: 12px;
 
 }
 .card.done .cardInner {
@@ -37,4 +47,17 @@
     background-color: #1bb95e;
     color: white;
     transform: rotateY(180deg);
+}
+.icons{
+    font-size: 26px;
+    width: 50px;
+
+}
+.icons:hover{
+    color: rgb(3, 192, 192);
+}
+
+
+.isRemembered .cardFront{
+    text-decoration: line-through;
 }

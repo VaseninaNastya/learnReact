@@ -1,138 +1,103 @@
 import React from "react";
 import Reset from '../Reset';
-import PrimeCardHolder from '../PrimeCardHolder';
+
 import CardHolder from '../CardHolder';
-import Card from '../Card';
+
 import s from "./MainContentBlock.module.css";
 
 
 const wordsList = [
     {
-      eng: 'between',
-      rus: 'между'
+        eng: 'between',
+        rus: 'между',
+        id: 0
     },
     {
-      eng: 'high',
-      rus: 'высокий'
+        eng: 'high',
+        rus: 'высокий',
+        id: 1
     },
     {
-      eng: 'really',
-      rus: 'действительно'
+        eng: 'really',
+        rus: 'действительно',
+        id: 2
     },
     {
-      eng: 'something',
-      rus: 'что-нибудь'
+        eng: 'something',
+        rus: 'что-нибудь',
+        id: 3
     },
     {
-      eng: 'most',
-      rus: 'большинство'
+        eng: 'most',
+        rus: 'большинство',
+        id: 4
     },
     {
-      eng: 'another',
-      rus: 'другой'
+        eng: 'another',
+        rus: 'другой',
+        id: 5
     },
     {
-      eng: 'much',
-      rus: 'много'
+        eng: 'much',
+        rus: 'много',
+        id: 6
     },
     {
-      eng: 'family',
-      rus: 'семья'
+        eng: 'family',
+        rus: 'семья',
+        id: 7
     },
     {
-      eng: 'own',
-      rus: 'личный'
+        eng: 'own',
+        rus: 'личный',
+        id: 8
     },
     {
-      eng: 'out',
-      rus: 'из/вне'
+        eng: 'out',
+        rus: 'из/вне',
+        id: 9
     },
     {
-      eng: 'leave',
-      rus: 'покидать'
+        eng: 'leave',
+        rus: 'покидать',
+        id: 10
     },
-  ];
-  const wordsList2 = [
-    {
-      eng: 'between',
-      rus: 'между'
-    },
-    {
-      eng: 'high',
-      rus: 'высокий'
-    },
-    {
-      eng: 'really',
-      rus: 'действительно'
-    },
-    {
-      eng: 'something',
-      rus: 'что-нибудь'
-    },
-    {
-      eng: 'most',
-      rus: 'большинство'
-    },
-    {
-      eng: 'another',
-      rus: 'другой'
-    },
-    {
-      eng: 'much',
-      rus: 'много'
-    },
-    {
-      eng: 'family',
-      rus: 'семья'
-    },
-  
-  ];
-  
+];
 
 class MainContentBlock extends React.Component {
-    state = { allCardWhite: false }
-    updateData = (value) => {
+    state = { wordArr: wordsList }
 
-        this.setState({ allCardWhite: value })
+    handleDelitedItem = (id) => {
 
+        this.setState(({wordArr}) => {
+            const idx =wordArr.findIndex(item=>item.id===id)
+
+            const newWordArr = [
+                ...wordArr.slice(0, idx),
+                ...wordArr.slice(idx+1)
+            ]
+            return {
+                wordArr: newWordArr,
+            }
+        }
+
+
+        )
     }
     render() {
         console.log(this.state);
         const { allCardWhite } = this.state;
         const { children, hideBackground } = this.props;
         const styleCover = hideBackground ? { backgroundImage: "none" } : {};
+        const { wordArr } = this.state;
         return (
             <div className={s.cover}>
                 <div className={s.wrap}>
-                    <Reset updateData={this.updateData} />
-                    <PrimeCardHolder>
-                        <CardHolder>
-                            {
-                                wordsList.map(({ eng, rus }, index) => {
-                                    return (
-                                    
-                                    <Card key={index} eng={eng} rus={rus} 
-                                    allCardWhite={allCardWhite}
-                                    />
-                                    
-                                    )
-                                })
-                            }
-                        </CardHolder>
-                        <CardHolder>
-                        {
-                                wordsList2.map(({ eng, rus }, index) => {
-                                    return (
-                                    
-                                    <Card key={index} eng={eng} rus={rus} 
-                                    allCardWhite={allCardWhite}
-                                    />
-                                    
-                                    )
-                                })
-                            }
-                        </CardHolder>
-                    </PrimeCardHolder>
+
+
+                    <CardHolder item={wordArr} onDelitedItem={this.handleDelitedItem} />
+
+
                     {children}
                 </div>
             </div>
