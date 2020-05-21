@@ -3,15 +3,16 @@ import s from "./HeaderBlock.module.css";
 
 import { ReactComponent as ReactLogoSvg} from '../../logo.svg';
 
-const HeaderBlock = () => {
+const HeaderBlock = ({hideBackground=false, children}) => {
+
+    const styleCover = hideBackground? {backgroundImage: "none"}:{};
     return (
-        <div className={s.cover}>
+        <div className={s.cover} style={styleCover}>
             <div className={s.wrap}>
-                <h1 className={s.header}>
-                    Учите английский онлайн
-                </h1>
+
                 <ReactLogoSvg />
-                <p className={s.descr}>Учите слова используя карточки</p>
+
+                {children}
             </div>
         </div>
     )

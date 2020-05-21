@@ -1,19 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import HeaderBlock from "./components/HeaderBlock";
+import Header from "./components/Header";
+import Paragrah from "./components/Paragraph";
 
-function App() {
+import MainContentBlock from "./components/MainContentBlock";
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          hello world, react.js
-        </p>
+    <>
+      <HeaderBlock>
+        <Header>
+          Время учить слова онлайн
+      </Header>
+        <Paragrah>
+          Используйте карточки для запоминания и пополняйте активный слованый запас
+      </Paragrah>
+      </HeaderBlock>
+      <MainContentBlock/>
 
-      </header>
-    </div>
+
+
+    </>
   );
+
 }
 
 export default App;
