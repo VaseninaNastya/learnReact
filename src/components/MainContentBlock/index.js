@@ -69,20 +69,32 @@ class MainContentBlock extends React.Component {
 
     handleDelitedItem = (id) => {
 
-        this.setState(({wordArr}) => {
-            const idx =wordArr.findIndex(item=>item.id===id)
+        this.setState(({ wordArr }) => {
+            const idx = wordArr.findIndex(item => item.id === id)
 
             const newWordArr = [
                 ...wordArr.slice(0, idx),
-                ...wordArr.slice(idx+1)
+                ...wordArr.slice(idx + 1)
             ]
             return {
                 wordArr: newWordArr,
             }
         }
-
-
         )
+    }
+    handleAddItem = ({ rus, eng }) => {
+
+
+        this.setState(({ wordArr }) => {
+            const id = wordArr[wordArr.length - 1].id + 1
+            const AddWordArr = [
+                ...wordArr,
+                { rus: rus, eng: eng, id: id }
+            ]
+            return {
+                wordArr: AddWordArr
+            }
+        })
     }
     render() {
         console.log(this.state);
@@ -95,7 +107,7 @@ class MainContentBlock extends React.Component {
                 <div className={s.wrap}>
 
 
-                    <CardHolder item={wordArr} onDelitedItem={this.handleDelitedItem} />
+                    <CardHolder item={wordArr} onDelitedItem={this.handleDelitedItem} onAddItem={this.handleAddItem} />
 
 
                     {children}
