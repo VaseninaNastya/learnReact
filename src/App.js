@@ -1,28 +1,55 @@
 import React from 'react';
-import HeaderBlock from "./components/HeaderBlock";
-import Header from "./components/Header";
-import Paragrah from "./components/Paragraph";
+import { fire } from "./servises/firebase";
+import LoginPage from "./pages/login";
+import s from "./App.module.css"
+import HomePage from "./pages/home";
+import { Spin } from 'antd';
 
-import MainContentBlock from "./components/MainContentBlock";
+class App extends React.Component {
+  state = {
+    user: null
+  }
+  componentDidMount() {
+    fire.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          user,
+        })
+      } else {
+        this.setState({
+          user: false,
+        })
+      }
+    })
+  }
 
-const App = () => {
-  return (
-    <>
-      <HeaderBlock>
-        <Header>
-          Время учить слова онлайн
-      </Header>
-        <Paragrah>
-          Используйте карточки для запоминания и пополняйте активный слованый запас
-      </Paragrah>
-      </HeaderBlock>
-      <MainContentBlock/>
+
+  render() {
+    if (this.state.user === null) {
+      return (
+        <div className={s.loader_wrap}>
+          <Spin size="large" />
+        </div>
+      );
 
 
+    } else {
+      return (
+        <>{
+          this.state.user ? <HomePage user={this.state.user}/> : <LoginPage />
+        }
 
-    </>
-  );
+
+        </>
+      );
+    }
+
+  }
+
 
 }
 
 export default App;
+      /*
+import HomePage from "./pages/home"
+<HomePage/>  */
