@@ -1,18 +1,37 @@
 import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/auth";
+
+
 const firebaseConfig = {
-    apiKey: "AIzaSyDsnSAwDgs8EGlvh4PdCMT_3kEA8xRMGRU",
-    authDomain: "learn-the-world-4ba25.firebaseapp.com",
-    databaseURL: "https://learn-the-world-4ba25.firebaseio.com",
-    projectId: "learn-the-world-4ba25",
-    storageBucket: "learn-the-world-4ba25.appspot.com",
-    messagingSenderId: "540427061944",
-    appId: "1:540427061944:web:9e11306a6819100bc2024d"
+    apiKey: process.env.REACT_APP_FIREBASECONFIG_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASECONFIG_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASECONFIG_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASECONFIG_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASECONFIG_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASECONFIG_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASECONFIG_APP_ID
 };
+class Firebase {
+    constructor() {
+        firebase.initializeApp(firebaseConfig);
+        this.database = firebase.database()
+        this.auth = firebase.auth()
+        this.userUid = null;
+    }
+    setUserUid = (uid) => this.userUid = uid;
 
-firebase.initializeApp(firebaseConfig);
-export const fire =firebase;
-const database = firebase.database();
+    signWithEmailAndPassword = (email,password) => this.auth.signInWithEmailAndPassword(email,password);
 
-export default database;
+    createUserWithEmailAndPassword = (email,password) => this.auth.createUserWithEmailAndPassword(email, password);
+
+    signOut = () => this.auth.signOut();
+
+    getUserCardsRef = () => this.database.ref(`/cards/${this.userUid}`)
+}
+
+
+
+export default Firebase;
+
+

@@ -1,19 +1,19 @@
 import React from "react";
 import s from "./Login.module.css"
-import { Layout, Form, Input, Button} from 'antd';
-import {fire} from "../../servises/firebase"
+import { Layout, Form, Input, Button } from 'antd';
+import FirebaseContext from '../../context/firebaseContext';
 const { Content } = Layout;
 
 class LoginPage extends React.Component {
-    onFinish=({email, password})=>{
-
-        fire.auth()
-        .signInWithEmailAndPassword(email, password)
-        .then(res=>{
-            console.log("####:res", res)
-        })
+    onFinish = ({ email, password }) => {
+        const { auth } = this.context
+    auth
+            .signInWithEmailAndPassword(email, password)
+            .then(res => {
+                console.log("####:res", res)
+            })
     }
-    onFinishFailed=(errorMsg)=>{
+    onFinishFailed = (errorMsg) => {
         console.log("####: errorMsg", errorMsg);
     }
     render() {
@@ -27,39 +27,35 @@ class LoginPage extends React.Component {
         return (
             <Layout>
                 <Content>
-                    
                     <div className={s.root}>
-                    <div className={s.form_wrap}>
-
-                        <Form
-                            {...layout}
-                            name="basic"
-                            initialValues={{ remember: true }}
-                            onFinish={this.onFinish}
-                            onFinishFailed={this.onFinishFailed}
-                        >
-                            <Form.Item
-                                label="Username"
-                                name="email"
-                                rules={[{ required: true, message: 'Please input your email!' }]}
+                        <div className={s.form_wrap}>
+                            <Form
+                                {...layout}
+                                name="basic"
+                                initialValues={{ remember: true }}
+                                onFinish={this.onFinish}
+                                onFinishFailed={this.onFinishFailed}
                             >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Password"
-                                name="password"
-                                rules={[{ required: true, message: 'Please input your password!' }]}
-                            >
-                                <Input.Password />
-                            </Form.Item>
-
-                            <Form.Item {...tailLayout}>
-                                <Button type="primary" htmlType="submit">
-                                    Submit
+                                <Form.Item
+                                    label="Username"
+                                    name="email"
+                                    rules={[{ required: true, message: 'Please input your email!' }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Password"
+                                    name="password"
+                                    rules={[{ required: true, message: 'Please input your password!' }]}
+                                >
+                                    <Input.Password />
+                                </Form.Item>
+                                <Form.Item {...tailLayout}>
+                                    <Button type="primary" htmlType="submit">
+                                        Submit
         </Button>
-                            </Form.Item>
-                        </Form>
+                                </Form.Item>
+                            </Form>
                         </div>
                     </div>
                 </Content>
@@ -69,5 +65,5 @@ class LoginPage extends React.Component {
 
 
 }
-
+LoginPage.contextType = FirebaseContext;
 export default LoginPage;
