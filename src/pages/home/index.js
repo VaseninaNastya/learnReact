@@ -8,7 +8,7 @@ import MainContentBlock from "../../components/MainContentBlock";
 
 class HomePage extends React.Component {
     render() {
-console.log("шабудабу",this.props.user.uid)
+
         return (
             <>
                 <HeaderBlock>

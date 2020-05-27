@@ -5,7 +5,7 @@ import { Input } from "antd";
 import s from "./CardHolder.module.css";
 import getTranslateWord from "../../servises/yandex-dictionary";
 import { database } from "firebase";
-
+import TestContext from '../../context/testContext';
 const { Search } = Input;
 class CardHolder extends React.Component {
     state = {
@@ -19,14 +19,9 @@ class CardHolder extends React.Component {
     }
     handleInputChangeNewEng = (e) => {
         this.setState({ newEng: e.target.value })
-
     };
-
     getWord = async () => {
         const getWord = await getTranslateWord(this.state.newEng);
-
-
-
         if (getWord.length > 0) {
             this.props.onAddItem(
                 {
@@ -38,25 +33,8 @@ class CardHolder extends React.Component {
         this.setState({
             isBusy: false,
             newEng: ""
-
         })
-
     }
-
-    /*
-    handleSubmitForm = ()=>{
-
-        const {wordArr} = this.state;
-        const newArr=[
-            ...wordArr,
-            {
-                eng,rus,
-                id: Math.floor(Math.random()*Math.floor(1000))
-            }
-        ]
-        database.ref(this.urlRequest).set(newArr);
-    }   */
-
     handleSubmitForm = async () => {
         const { wordArr } = this.state;
         this.setState({
@@ -65,9 +43,10 @@ class CardHolder extends React.Component {
         )
     }
     render() {
+        console.log("context", this.context);
+        
         const { item, onDelitedItem } = this.props;
         const { allCardWhite, isBusy } = this.state;
-
         return (
             <>
                 <Reset updateData={this.updateData} />
@@ -91,48 +70,10 @@ class CardHolder extends React.Component {
                         )
                     })
                 }</div>
-
             </>
         )
     }
 }
 
+CardHolder.contextType = TestContext;
 export default CardHolder;
-
-/*                <div className={s.CardHolder}>{
-                    item.map(({ eng, rus, id }) => {
-                        return (
-                            <Card key={id} eng={eng} rus={rus}
-                                allCardWhite={allCardWhite}
-                                onDelitedItem={() => onDelitedItem(id)}
-                            />
-                        )
-                    })
-                }</div>*/
-
-
-
-
-
-
-/*
-<div>
-{this.state.label}
-</div>*/
-/*                <form
-                    className={s.form}
-                    onSubmit={this.handleSubmitForm}>
-
-                    <input
-                        type="text"
-                        value={this.state.newRus}
-                        onChange={this.handleInputChangeNewRus} />
-                    <input
-                        type="text"
-                        value={this.state.newEng}
-                        onChange={this.handleInputChangeNewEng} />
-
-                    <button>
-                        Add new word
-                </button>
-                </form>*/
