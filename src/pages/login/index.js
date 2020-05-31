@@ -1,22 +1,31 @@
 import React from "react";
 import s from "./Login.module.css"
 import { Layout, Form, Input, Button } from 'antd';
-import FirebaseContext from '../../context/firebaseContext';
+import FirebaseContext, { withFirebase } from '../../context/firebaseContext';
 const { Content } = Layout;
 
 class LoginPage extends React.Component {
     onFinish = ({ email, password }) => {
-        const { auth } = this.context
-    auth
+        const { auth } = this.props.firebase;
+        const {setUserUid}=this.props.firebase;
+        const {history}=this.props;
+        auth
             .signInWithEmailAndPassword(email, password)
+            .catch(err => console.log("error", err))
             .then(res => {
-                console.log("####:res", res)
+                console.log("####:res", res);
+                setUserUid(res.user.uid);
+                localStorage.setItem('user', res.user.uid);
+                history.push("/")
             })
+
     }
     onFinishFailed = (errorMsg) => {
         console.log("####: errorMsg", errorMsg);
     }
     render() {
+        console.log("после использования обертки контекста пропсы", this.props);
+console.log("происходит ли ауф", this.props.firebase.auth)
         const layout = {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 },
@@ -53,7 +62,7 @@ class LoginPage extends React.Component {
                                 <Form.Item {...tailLayout}>
                                     <Button type="primary" htmlType="submit">
                                         Submit
-        </Button>
+                                    </Button>
                                 </Form.Item>
                             </Form>
                         </div>
@@ -62,8 +71,6 @@ class LoginPage extends React.Component {
             </Layout>
         );
     }
-
-
 }
 LoginPage.contextType = FirebaseContext;
-export default LoginPage;
+export default withFirebase(LoginPage);

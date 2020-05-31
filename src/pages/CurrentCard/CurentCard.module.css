@@ -1,0 +1,19 @@
+.root{
+    display: flex;
+    flex-wrap: wrap;
+    font-size     : 68px;
+    padding       : 24px;
+    letter-spacing: 1px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 400px;
+margin-left: auto;
+margin-right: auto;
+width: 600px;
+align-items: center;
+}
+.form{
+    margin-bottom: 12px;
+    margin-top: 12px;
+}

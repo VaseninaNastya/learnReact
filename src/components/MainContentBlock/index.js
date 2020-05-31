@@ -1,9 +1,10 @@
 import React from "react";
-import CardHolder from '../CardHolder';
+import CardHolder, {hoc} from '../CardHolder';
+import Card from '../Card';
 import database from "../../servises/firebase"
 import s from "./MainContentBlock.module.css";
 import { Button } from 'antd';
-import FirebaseContext from '../../context/firebaseContext';
+import FirebaseContext , {withFirebase} from '../../context/firebaseContext';
 const wordsList = [
     {
         eng: 'between',
@@ -64,8 +65,9 @@ const wordsList = [
 
 class MainContentBlock extends React.Component {
     state = { wordArr: [] }
+
     componentDidMount() {
-        const { getUserCardsRef } = this.context
+        const { getUserCardsRef } = this.props.firebase
         getUserCardsRef().on(`value`, res => {
             console.log(`####: res`, res.val());
             this.setState({
@@ -73,9 +75,9 @@ class MainContentBlock extends React.Component {
             })
         })
     }
-    urlRequest = `/cards/${this.props.user.uid}`;
+
     handleAddItem = ({ rus, eng }) => {
-        const { getUserCardsRef } = this.context
+        const { getUserCardsRef } = this.props.firebase
         const newArr = [
             ...this.state.wordArr,
             {
@@ -85,40 +87,45 @@ class MainContentBlock extends React.Component {
             }
         ]
         this.setState({ wordArr: newArr })
-        console.log(
-            "какой массив вышел?", newArr
-        )
         getUserCardsRef().set(newArr)
 
     }
     handleDelitedItem = (id) => {
-        const { getUserCardsRef } = this.context
+        const { getUserCardsRef } = this.props.firebase
         const newArr = this.state.wordArr.filter(item => item.id !== id)
         getUserCardsRef().set(newArr)
     }
     handleLogOut = () => {
-        const { auth } = this.context
+        const { auth } = this.props.firebase
         auth.signOut()
+        const {history}=this.props
+        history.push("/login")
     }
     render() {
 
-        const { allCardWhite } = this.state;
-        const { hideBackground } = this.props;
-        const styleCover = hideBackground ? { backgroundImage: "none" } : {};
+        console.log('что с пропсами в мейн контент блок', this.props)
         const { wordArr } = this.state;
+
         return (
+
             <div className={s.cover}>
                 <div className={s.wrap}>
-                    <CardHolder item={wordArr} onDelitedItem={this.handleDelitedItem} onAddItem={this.handleAddItem} />
-                    <Button onClick={this.handleLogOut}>{this.props.user.email}</Button>
+                    <FirebaseContext.Consumer>
+                    {
+                        ({getUserCardsRef})=>{
+                            const CardEngList=hoc(Card, getUserCardsRef);
+                            return <CardEngList item={wordArr} onDelitedItem={this.handleDelitedItem} onAddItem={this.handleAddItem} user={this.props.firebase}/>
+                        }
+                    }
+                    </FirebaseContext.Consumer>
+                    <Button onClick={this.handleLogOut} >{this.props.firebase.userEmail}</Button>
+
+
                 </div>
             </div>
         )
     }
-
 }
-
 MainContentBlock.contextType = FirebaseContext;
-export default MainContentBlock;
-
+export default withFirebase(MainContentBlock);
 

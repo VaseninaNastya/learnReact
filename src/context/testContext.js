@@ -1,3 +1,3 @@
 import React from "react";
-const TextContext = React.createContext(null);
-export default TextContext;
+const TestContext = React.createContext(null);
+export default TestContext;

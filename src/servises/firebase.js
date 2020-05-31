@@ -18,16 +18,23 @@ class Firebase {
         this.database = firebase.database()
         this.auth = firebase.auth()
         this.userUid = null;
+        this.userEmail=null;
     }
     setUserUid = (uid) => this.userUid = uid;
-
+    setUserEmail = (email) => this.userEmail = email;
     signWithEmailAndPassword = (email,password) => this.auth.signInWithEmailAndPassword(email,password);
 
     createUserWithEmailAndPassword = (email,password) => this.auth.createUserWithEmailAndPassword(email, password);
 
     signOut = () => this.auth.signOut();
 
-    getUserCardsRef = () => this.database.ref(`/cards/${this.userUid}`)
+    getUserCardsRef = () => {
+        console.log('userId',this.userId);
+        return this.database.ref(`/cards/${this.userUid}`);
+
+}
+getUserCurrentCardRef=(id)=> this.database.ref(`/cards/${this.userUid}/${id}`);
+    
 }
 
 

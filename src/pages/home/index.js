@@ -5,10 +5,11 @@ import Header from "../../components/Header"
 import Paragrah from "../../components/Paragraph";
 
 import MainContentBlock from "../../components/MainContentBlock";
+import FirebaseContext, { withFirebase } from "../../context/firebaseContext";
 
 class HomePage extends React.Component {
     render() {
-
+        console.log('пропсы в хоме', this.props)
         return (
             <>
                 <HeaderBlock>
@@ -19,7 +20,7 @@ class HomePage extends React.Component {
                         Используйте карточки для запоминания и пополняйте активный слованый запас
                     </Paragrah>
                 </HeaderBlock>
-                <MainContentBlock user={this.props.user} />
+                <MainContentBlock history={this.props.history} />
             </>
         );
     }
@@ -27,4 +28,4 @@ class HomePage extends React.Component {
 
 }
 
-export default HomePage;
+export default withFirebase(HomePage);
