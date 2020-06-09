@@ -19,7 +19,7 @@ class CurrentCard extends React.PureComponent {
 
     componentDidMount() {
         const { firebase, match: { params } } = this.props;
-        console.log('CurrentWord props', this.props);
+
         if (params.id) {
             firebase.getUserCurrentCardRef(params.id).once('value').then(res => {
                 this.setState({

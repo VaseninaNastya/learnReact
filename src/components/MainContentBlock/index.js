@@ -5,63 +5,8 @@ import database from "../../servises/firebase"
 import s from "./MainContentBlock.module.css";
 import { Button } from 'antd';
 import FirebaseContext , {withFirebase} from '../../context/firebaseContext';
-const wordsList = [
-    {
-        eng: 'between',
-        rus: 'между',
-        id: 0
-    },
-    {
-        eng: 'high',
-        rus: 'высокий',
-        id: 1
-    },
-    {
-        eng: 'really',
-        rus: 'действительно',
-        id: 2
-    },
-    {
-        eng: 'something',
-        rus: 'что-нибудь',
-        id: 3
-    },
-    {
-        eng: 'most',
-        rus: 'большинство',
-        id: 4
-    },
-    {
-        eng: 'another',
-        rus: 'другой',
-        id: 5
-    },
-    {
-        eng: 'much',
-        rus: 'много',
-        id: 6
-    },
-    {
-        eng: 'family',
-        rus: 'семья',
-        id: 7
-    },
-    {
-        eng: 'own',
-        rus: 'личный',
-        id: 8
-    },
-    {
-        eng: 'out',
-        rus: 'из/вне',
-        id: 9
-    },
-    {
-        eng: 'leave',
-        rus: 'покидать',
-        id: 10
-    },
-];
+import composedHoc from "../CardHolder";
+
 
 class MainContentBlock extends React.Component {
     state = { wordArr: [] }
@@ -103,7 +48,7 @@ class MainContentBlock extends React.Component {
     }
     render() {
 
-        console.log('что с пропсами в мейн контент блок', this.props)
+
         const { wordArr } = this.state;
 
         return (
@@ -113,14 +58,12 @@ class MainContentBlock extends React.Component {
                     <FirebaseContext.Consumer>
                     {
                         ({getUserCardsRef})=>{
-                            const CardEngList=hoc(Card, getUserCardsRef);
+                            const CardEngList=composedHoc(Card, getUserCardsRef);
                             return <CardEngList item={wordArr} onDelitedItem={this.handleDelitedItem} onAddItem={this.handleAddItem} user={this.props.firebase}/>
                         }
                     }
                     </FirebaseContext.Consumer>
                     <Button onClick={this.handleLogOut} >{this.props.firebase.userEmail}</Button>
-
-
                 </div>
             </div>
         )

@@ -1,4 +1,5 @@
 import React from "react";
+import {connect} from 'react-redux';
 import Card from "../Card";
 import Reset from "../Reset";
 import { Input } from "antd";
@@ -8,6 +9,8 @@ import getTranslateWord from "../../servises/yandex-dictionary";
 import { database } from "firebase";
 import TestContext from '../../context/testContext';
 import FirebaseContext from '../../context/firebaseContext';
+import { bindActionCreators, compose } from "redux";
+import { cardListAction, cardListResolveAction, cardListRejectAction } from "../../actions/cardListActions";
 const { Search } = Input;
 
 export const hoc = (Component, getData) => {
@@ -15,22 +18,25 @@ export const hoc = (Component, getData) => {
         static contextType = FirebaseContext;
         state = {
             allCardWhite: false,
-            newEng: "",
-            newRus: "",
+            // newEng: "",
+            // newRus: "",
             isBusy: false,
             items: []
         }
         componentDidMount() {
-
-            console.log("пытаюсь понять, передается ли контекст", this.context);
-
+            const {
+                fetchCardList,
+                fetchCardListReject,
+                fetchCardListResolve
+            } = this.props;
+console.log('пропсы после подключения экшнов', this.props)
+            fetchCardList();
             getData().once('value').then(res => {
                 console.log("res", res.val());
-                ;
-                this.setState({
-                    items: res.val() || []
-                })
-                console.log("пытаюсь понять, передается ли итемс", this.state.items)
+                fetchCardListResolve(res.val());
+
+            }).catch(err =>{
+                fetchCardListReject(err)
             })
         }
         updateData = (value) => {
@@ -62,15 +68,14 @@ export const hoc = (Component, getData) => {
             )
         }
         render() {
-            console.log("передаются ли пропсы для маппинга", this.props.id);
-            const { items } = this.state;
-            console.log("ищу длинну", this.state);
+            console.log("пропсы в кардхолдере", this.props);
             
-            const { item, onDelitedItem } = this.props;
-            const { allCardWhite, isBusy } = this.state;
-            if (items.length === 0) {
+            // const { items } = this.state;
+            const { item, onDelitedItem, items, allCardWhite, isBusy} = this.props;
+            // const { allCardWhite, isBusy } = this.state;
+            if (this.props.isBusy) {
                 return <Spin />
-            } else{
+            } else {
                 return (
                     <>
                         <Reset updateData={this.updateData} />
@@ -85,12 +90,11 @@ export const hoc = (Component, getData) => {
                                 onChange={this.handleInputChangeNewEng} />
                         </div>
                         <div className={s.CardHolder}>{
-                            
+
                             item.map(({ eng, rus, id }, index) => {
                                 return (
-
                                     <Component
-                                    index={index}
+                                        index={index}
                                         key={id}
                                         eng={eng}
                                         rus={rus}
@@ -103,11 +107,70 @@ export const hoc = (Component, getData) => {
                     </>
                 )
             }
-                
-            
 
         }
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        allCardWhite: state.cardList.allCardWhite,
+        isBusy: state.cardList.isBusy,
+        item: state.cardList.payload || [],
+    };
+}
 
-export default hoc(Card);
+const mapDispatchToProps = (dispatch) => {
+    console.log( ' cardListAction', cardListAction);
+    
+    return bindActionCreators({
+fetchCardList: cardListAction,
+fetchCardListResolve: cardListResolveAction,
+fetchCardListReject: cardListRejectAction
+    }, dispatch)
+}
+
+const composedHoc = compose(
+    connect(mapStateToProps,mapDispatchToProps),hoc)
+export default composedHoc;
+
+
+
+
+
+/*const composedHoc = compose(connect(mapStateToProps,mapDispatchToProps),hoc)*/
+
+
+
+/*connect(mapStateToProps, mapDispatchToProps)(App);
+const composedHoc = compose(
+    connect(mapStateToProps,mapDispatchToProps),
+);
+/*const mapStateToProps = (state) =>{
+    return{
+      userUid: state.user.userUid,
+      userEmail: state.user.userEmail
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({
+      addUser: addUserAction,
+    }, dispatch)
+  }
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(App);
+
+
+
+  fetchCardList: cardListAction,
+fetchCardListResolve: cardListResolveAction,
+fetchCardListReject: cardListRejectAction*/
+/*
+
+const composedHoc = compose(
+    connect(mapStateToProps,mapDispatchToProps),
+    hoc
+);
+export default composedHoc;
+
+*/

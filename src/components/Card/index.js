@@ -4,23 +4,24 @@ import s from './Card.module.css'
 import cl from "classnames";
 import { CheckSquareOutlined, DeleteOutlined  } from "@ant-design/icons";
 import {withRouter} from 'react-router-dom';
+import { compose } from "redux";
+
+import {connect} from 'react-redux';
+
+
 class Card extends React.Component {
     state = {
         done: false,
         isRemembered: false,
     }
     componentDidMount(){
-        console.log('eeeeee', this.props);
         const {match: {params}, index}=this.props;
-        console.log("че такое индекс", this.props.index)
         if(index===+params.id){
             this.setState({
                 done: params.isDone
             })
         }
-        
     }
-    
     handleCardClick = () => {
         this.setState(({done, isRemembered}) => {
             if (!isRemembered) {
@@ -38,12 +39,11 @@ class Card extends React.Component {
         }
         )
     }
-
     render() {
         const { eng, rus, allCardWhite, onDelitedItem } = this.props;
         const { done, isRemembered } = this.state;
         const cardClass = cl(s.card, { [s.done]: done }, { [s.done]: allCardWhite }, { [s.isRemembered]: isRemembered });
-        console.log("Пропсы внутри картхолдера, id", this.props)
+console.log("пропсы в кард", this.props);
         return (
             <div className={s.root}>
                 <div className={cardClass}>
@@ -59,23 +59,28 @@ class Card extends React.Component {
                         </div>
                     </div>
                 </div>
-
                 <div className={s.icons}>
                     <CheckSquareOutlined onClick={this.handleIsRememberClick} />
-
                 </div>
                 <div className={s.icons}>
-
-                    
                     <DeleteOutlined onClick={onDelitedItem}/>
                 </div>
             </div>
-
         )
     };
 }
 
-export default withRouter(Card);
 
+const mapStateToProps= (state) => {
+    return {
+        allCardWhite: state.reset.allCardWhite,
+    };
+}
+/*
 
-/*        const { eng, rus, allCardWhite, onDelitedItem } = this.props;*/
+const composedCard= compose(
+    connect(mapStateToProps,null),withRouter(Card))
+export default composedCard;
+
+*/
+export default connect(mapStateToProps,null)(withRouter(Card))

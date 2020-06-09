@@ -14,19 +14,13 @@ class Clock extends React.PureComponent {
     componentDidMount() {
         this.interval = setInterval(this.tick, 1000)
     }
-    componentDidUpdate(prevProps, prevState) {
-        /*if (tFhis.state !== prevState) {
-            this.setState()
-        }*/
 
-        console.log("componentDidUpdate")
-    }
     componentWillUnmount() {
-        console.log("sdfsdfsfsfdsf");
+
         clearInterval(this.interval)
     }
     tick = () => {
-        console.log("mmsmsss");
+
         this.setState({
             date: new Date()
 
